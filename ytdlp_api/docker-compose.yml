@@ -1,0 +1,11 @@
+services:
+  ytdlp_api:
+    image: ghcr.io/felix2yu/ytdlp_api:latest
+    container_name: ytdlp_api
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+    - ./downloads:/app/downloads:rw
+    - ./params.py:/app/params.py:ro
+version: '3'
