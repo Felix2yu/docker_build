@@ -7,7 +7,7 @@ RUN apk add gcc musl-dev linux-headers --no-cache && \
     chmod 777 /mnt/*
 
 FROM python:alpine
-LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/ytdlp_api" \
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 ENV TZ=Asia/Shanghai

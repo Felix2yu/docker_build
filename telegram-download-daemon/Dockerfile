@@ -6,6 +6,9 @@ RUN apk add gcc musl-dev linux-headers libffi-dev --no-cache && \
     pip3 wheel cryptg cffi
 
 FROM python:alpine
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
+      maintainer="Felix2yu <yufei.im@icloud.com>" \
+      org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 ENV TZ=Asia/Shanghai
 
 RUN adduser fei -D -G users -s /bin/sh && \

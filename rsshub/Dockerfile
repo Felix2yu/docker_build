@@ -14,12 +14,11 @@ RUN ln -sf /bin/bash /bin/sh && \
     node scripts/docker/minify-docker.js
 
 FROM node:slim as app
-LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/rsshub-docker" \
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
-ENV NODE_ENV production
-ENV TZ Asia/Shanghai
+ENV NODE_ENV production TZ Asia/Shanghai
 
 RUN apt-get update && apt-get upgrade -y && apt-get -yq install ca-certificates tzdata git --no-install-recommends && \
     rm -rf /var/lib/apt/lists/* && \
