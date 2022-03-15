@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 ENV TZ=Asia/Shanghai
-ARG GLIBC_VERSION="2.35-r0" \
+ARG GLIBC_VERSION="2.34-r0" \
     SNELL_VERSION="3.0.1"
 
 RUN apk update && apk upgrade && \
