@@ -1,4 +1,4 @@
-FROM node:slim as dep-builder
+FROM node:lts-slim as dep-builder
 
 WORKDIR /app
 
@@ -13,14 +13,15 @@ RUN ln -sf /bin/bash /bin/sh && \
     rm -rf RSSHub && \
     node scripts/docker/minify-docker.js
 
-FROM node:slim as app
+FROM node:lts-slim as app
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
 ENV NODE_ENV production TZ Asia/Shanghai
 
-RUN apt-get update && apt-get upgrade -y && apt-get -yq install ca-certificates tzdata git --no-install-recommends && \
+RUN apt-get update && \
+    apt-get -yq install ca-certificates tzdata git --no-install-recommends && \
     rm -rf /var/lib/apt/lists/* && \
     git clone https://github.com/DIYgod/RSSHub && \
     mv RSSHub /app && \
