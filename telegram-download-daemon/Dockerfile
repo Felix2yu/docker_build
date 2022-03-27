@@ -23,8 +23,8 @@ WORKDIR /app
 COPY --from=builder /mnt/*.whl /app/
 
 RUN /usr/local/bin/python -m pip install --upgrade pip --no-warn-script-location && \
-    /home/user/.local/bin/pip install *.whl --no-warn-script-location && \
-    /home/user/.local/bin/pip install -U telethon --no-warn-script-location && \
+    pip install *.whl --no-warn-script-location && \
+    pip install -U telethon --no-warn-script-location && \
     rm -f *.whl
 
 VOLUME ["/downloads"]
