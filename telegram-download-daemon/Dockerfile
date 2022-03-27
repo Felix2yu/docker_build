@@ -11,20 +11,20 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 ENV TZ=Asia/Shanghai
 
-RUN adduser fei -D -G users -s /bin/sh && \
+RUN adduser user -D -G users -s /bin/sh && \
     apk add bash tzdata ca-certificates --no-cache && \
     wget https://github.com/alfem/telegram-download-daemon/archive/refs/heads/master.zip && \
     unzip master.zip && \
     rm -f master.zip && \
     mv telegram-download-daemon-master app
 
-USER fei
+USER user
 WORKDIR /app
 COPY --from=builder /mnt/*.whl /app/
 
 RUN /usr/local/bin/python -m pip install --upgrade pip --no-warn-script-location && \
-    /home/fei/.local/bin/pip3 install *.whl --no-warn-script-location && \
-    /home/fei/.local/bin/pip3 install -U telethon --no-warn-script-location && \
+    /home/user/.local/bin/pip install *.whl --no-warn-script-location && \
+    /home/user/.local/bin/pip install -U telethon --no-warn-script-location && \
     rm -f *.whl
 
 VOLUME ["/downloads"]
