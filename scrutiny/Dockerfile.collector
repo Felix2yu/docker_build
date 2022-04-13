@@ -1,0 +1,20 @@
+FROM alpine:latest
+
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
+      maintainer="Felix2yu <yufei.im@icloud.com>" \
+      org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
+
+ENV TZ=Asia/Shanghai
+WORKDIR /scrutiny
+
+RUN apk update && \
+    apk --no-cache add ca-certificates tzdata smartmontools && \
+    wget -q -O /usr/local/bin/scrutiny-collector-metrics https://github.com/AnalogJ/scrutiny/releases/latest/download/scrutiny-collector-metrics-linux-amd64 && \
+    mkdir config && \
+    wget -q -O config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
+    chmod +x /usr/local/bin/scrutiny-collector-metrics && \
+    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run >/proc/1/fd/1 2>/proc/1/fd/2' > /etc/crontabs/root
+
+VOLUME /scrutiny/config
+
+CMD ["crond", "-f"]

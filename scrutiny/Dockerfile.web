@@ -1,0 +1,35 @@
+FROM node:lts-alpine as frontendbuild
+
+ENV NPM_CONFIG_LOGLEVEL=warn NG_CLI_ANALYTICS=false
+
+RUN apk update && apk add git && \
+    git clone https://github.com/AnalogJ/scrutiny && \
+    cd scrutiny/webapp/frontend/ && \
+    npm install -g @angular/cli && \
+    mkdir -p /scrutiny/dist && \
+    npm install && \
+    ng build --output-path=/scrutiny/dist --deploy-url="/web/" --base-href="/web/" --prod
+
+# # #
+
+FROM alpine:latest
+
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
+      maintainer="Felix2yu <yufei.im@icloud.com>" \
+      org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
+
+ENV TZ=Asia/Shanghai
+WORKDIR /scrutiny
+
+COPY --from=frontendbuild /scrutiny/dist /scrutiny/web
+
+RUN apk update && \
+    apk --no-cache add ca-certificates tzdata && \
+    wget -q -O /usr/local/bin/scrutiny-web https://github.com/AnalogJ/scrutiny/releases/latest/download/scrutiny-web-linux-amd64 && \
+    chmod +x /usr/local/bin/scrutiny-web && \
+    mkdir config && \
+    wget -q -O config/scrutiny.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.scrutiny.yaml
+
+VOLUME /scrutiny/config
+
+CMD ["/usr/local/bin/scrutiny-web", "start"]
