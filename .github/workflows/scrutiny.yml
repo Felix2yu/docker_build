@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./scrutiny
-          file: ${{ context }}/Dockerfile.collector
+          file: ./scrutiny/Dockerfile.collector
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -100,7 +100,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./scrutiny
-          file: ${{ context }}/Dockerfile.web
+          file: ./scrutiny/Dockerfile.web
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
