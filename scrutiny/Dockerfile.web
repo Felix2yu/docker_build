@@ -2,11 +2,11 @@
 # # #
 FROM golang:latest as backendbuild
 
-WORKDIR /go/src/github.com/analogj/scrutiny
+WORKDIR /go/src/scrutiny
 
 RUN apt-get update && \
-	apt-get install -y --no-install-recommends git && \
-    git clone https://github.com/Felix2yu/scrutiny /go/src/github.com/analogj/scrutiny && \
+    apt-get install -y --no-install-recommends git && \
+    git clone https://github.com/Felix2yu/scrutiny /go/src/scrutiny && \
     go mod vendor && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny webapp/backend/cmd/scrutiny/scrutiny.go
 
@@ -32,7 +32,6 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
 ENV TZ=Asia/Shanghai
-WORKDIR /scrutiny
 
 COPY --from=frontendbuild /scrutiny/dist /scrutiny/web
 COPY --from=backendbuild /go/src/scrutiny/scrutiny /usr/local/bin/scrutiny-web
@@ -40,8 +39,8 @@ COPY --from=backendbuild /go/src/scrutiny/scrutiny /usr/local/bin/scrutiny-web
 RUN apk update && \
     apk --no-cache add ca-certificates tzdata && \
     chmod +x /usr/local/bin/scrutiny-web && \
-    mkdir config && \
-    wget -q -O config/scrutiny.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.scrutiny.yaml
+    mkdir /scrutiny/config && \
+    wget -q -O /scrutiny/config/scrutiny.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.scrutiny.yaml
 
 VOLUME /scrutiny/config
 
