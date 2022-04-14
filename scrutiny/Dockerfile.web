@@ -1,11 +1,23 @@
+
+# # #
+FROM golang:alpine as backendbuild
+
+WORKDIR /go/src/github.com/analogj/scrutiny
+
+RUN apk update && apk add git && \
+    git clone https://github.com/Felix2yu/scrutiny /go/src/github.com/analogj/scrutiny && \
+    go mod vendor && \
+    go build -ldflags '-w -extldflags "-static"' -o scrutiny webapp/backend/cmd/scrutiny/scrutiny.go
+
+# # #
 FROM node:lts-alpine as frontendbuild
 
 ENV NPM_CONFIG_LOGLEVEL=warn NG_CLI_ANALYTICS=false
 
 RUN apk update && apk add git && \
-    git clone https://github.com/AnalogJ/scrutiny && \
+    git clone https://github.com/Felix2yu/scrutiny && \
     cd scrutiny/webapp/frontend/ && \
-    npm install -g @angular/cli && \
+    npm install -g @angular/cli@9.1.4 && \
     mkdir -p /scrutiny/dist && \
     npm install && \
     ng build --output-path=/scrutiny/dist --deploy-url="/web/" --base-href="/web/" --prod
@@ -22,10 +34,10 @@ ENV TZ=Asia/Shanghai
 WORKDIR /scrutiny
 
 COPY --from=frontendbuild /scrutiny/dist /scrutiny/web
+COPY --from=backendbuild /go/src/github.com/analogj/scrutiny/scrutiny /usr/local/bin/scrutiny-web
 
 RUN apk update && \
     apk --no-cache add ca-certificates tzdata && \
-    wget -q -O /usr/local/bin/scrutiny-web https://github.com/AnalogJ/scrutiny/releases/latest/download/scrutiny-web-linux-amd64 && \
     chmod +x /usr/local/bin/scrutiny-web && \
     mkdir config && \
     wget -q -O config/scrutiny.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.scrutiny.yaml
