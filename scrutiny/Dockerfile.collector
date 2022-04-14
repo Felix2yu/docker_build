@@ -19,8 +19,8 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
 
 ENV TZ=Asia/Shanghai
 
-COPY --from=backendbuild /go/src/github.com/analogj/scrutiny/scrutiny-collector-selftest /usr/local/bin/scrutiny-collector-selftest
-COPY --from=backendbuild /go/src/github.com/analogj/scrutiny/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-metrics
+COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-selftest /usr/local/bin/scrutiny-collector-selftest
+COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-metrics
 RUN apk update && \
     apk --no-cache add ca-certificates tzdata smartmontools && \
     mkdir -p /scrutiny/config && \
