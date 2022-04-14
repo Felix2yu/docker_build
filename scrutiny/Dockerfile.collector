@@ -1,11 +1,11 @@
 # # #
 FROM golang:latest as backendbuild
 
-WORKDIR /go/src/github.com/analogj/scrutiny
+WORKDIR /go/src/scrutiny
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git && \
-    git clone https://github.com/Felix2yu/scrutiny /go/src/github.com/analogj/scrutiny && \
+    git clone https://github.com/Felix2yu/scrutiny /go/src/scrutiny && \
     go mod vendor && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny-collector-selftest collector/cmd/collector-selftest/collector-selftest.go && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny-collector-metrics collector/cmd/collector-metrics/collector-metrics.go
@@ -18,16 +18,15 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
 ENV TZ=Asia/Shanghai
-WORKDIR /scrutiny
 
 COPY --from=backendbuild /go/src/github.com/analogj/scrutiny/scrutiny-collector-selftest /usr/local/bin/scrutiny-collector-selftest
 COPY --from=backendbuild /go/src/github.com/analogj/scrutiny/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-metrics
 RUN apk update && \
     apk --no-cache add ca-certificates tzdata smartmontools && \
-    mkdir config && \
-    wget -q -O config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
+    mkdir -p /scrutiny/config && \
+    wget -q -O /scrutiny/config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
     chmod +x /usr/local/bin/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-selftest && \
-    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run >/proc/1/fd/1 2>/proc/1/fd/2' > /etc/crontabs/root
+    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run' > /etc/crontabs/root
 
 VOLUME /scrutiny/config
 
