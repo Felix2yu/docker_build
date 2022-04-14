@@ -3,15 +3,13 @@ FROM golang:latest as backendbuild
 
 WORKDIR /go/src/scrutiny
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    git clone https://github.com/Felix2yu/scrutiny /go/src/scrutiny && \
+RUN git clone https://github.com/Felix2yu/scrutiny /go/src/scrutiny && \
     go mod vendor && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny-collector-selftest collector/cmd/collector-selftest/collector-selftest.go && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny-collector-metrics collector/cmd/collector-metrics/collector-metrics.go
 
 # # #
-FROM alpine:latest
+FROM debian:stable-slim
 
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
@@ -21,13 +19,14 @@ ENV TZ=Asia/Shanghai
 
 COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-selftest /usr/local/bin/scrutiny-collector-selftest
 COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-metrics
-RUN apk update && \
-    apk --no-cache add ca-certificates tzdata smartmontools && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates tzdata smartmontools cron curl && \
     mkdir -p /scrutiny/config && \
-    wget -q -O /scrutiny/config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
+    curl -o /scrutiny/config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
     chmod +x /usr/local/bin/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-selftest && \
-    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run' > /etc/crontabs/root
+    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run' > /etc/cron.daily/scrutiny && \
+    rm -f /etc/cron.daily/apt-compat /etc/cron.daily/dpkg
 
 VOLUME /scrutiny/config
 
-CMD ["crond", "-f"]
+CMD ["cron", "-f"]
