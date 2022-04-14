@@ -1,10 +1,11 @@
 
 # # #
-FROM golang:alpine as backendbuild
+FROM golang:latest as backendbuild
 
 WORKDIR /go/src/github.com/analogj/scrutiny
 
-RUN apk update && apk add git && \
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends git && \
     git clone https://github.com/Felix2yu/scrutiny /go/src/github.com/analogj/scrutiny && \
     go mod vendor && \
     go build -ldflags '-w -extldflags "-static"' -o scrutiny webapp/backend/cmd/scrutiny/scrutiny.go
