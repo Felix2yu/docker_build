@@ -20,13 +20,15 @@ ENV TZ=Asia/Shanghai
 COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-selftest /usr/local/bin/scrutiny-collector-selftest
 COPY --from=backendbuild /go/src/scrutiny/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-metrics
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates tzdata smartmontools cron curl && \
+    apt-get install -y --no-install-recommends ca-certificates tzdata smartmontools curl && \
+    curl -fsSLO https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64 && \
+    chmod +x supercronic-linux-amd64 && \
+    mv supercronic-linux-amd64 /usr/local/bin/supercronic && \
     mkdir -p /scrutiny/config && \
     curl -o /scrutiny/config/collector.yaml https://github.com/AnalogJ/scrutiny/raw/master/example.collector.yaml && \
     chmod +x /usr/local/bin/scrutiny-collector-metrics /usr/local/bin/scrutiny-collector-selftest && \
-    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run' > /etc/cron.daily/scrutiny && \
-    rm -f /etc/cron.daily/apt-compat /etc/cron.daily/dpkg
+    echo '0 0 * * * /usr/local/bin/scrutiny-collector-metrics run' > /scrutiny/config/scrutiny.cron
 
 VOLUME /scrutiny/config
 
-CMD ["cron", "-f"]
+CMD ["/usr/local/bin/supercronic", "/scrutiny/config/scrutiny.cron"]
