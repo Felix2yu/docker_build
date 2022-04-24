@@ -1,4 +1,4 @@
-FROM node:lts-slim as dep-builder
+FROM node:slim as dep-builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN ln -sf /bin/bash /bin/sh && \
     rm -rf RSSHub && \
     node scripts/docker/minify-docker.js
 
-FROM node:lts-slim as app
+FROM node:slim as app
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
@@ -25,7 +25,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     git clone https://github.com/DIYgod/RSSHub && \
     mv RSSHub /app && \
-    sed -i 's%javdb.com%javdb36.com%g' /app/lib/v2/javdb/utils.js && \
+    sed -i 's%javdb.com%javdb38.com%g' /app/lib/v2/javdb/utils.js && \
     rm -rf /app/node_modules /app/npm-debug.log /app/Dockerfile* /app/docker-compose* /app/.dockerignore /app/.gitignore /app/LICENSE /app/.vscode /app/.github /app/assets /app/coverage /app/docs /app/test /app/.codecov.yml /app/.eslint* /app/.prettier* /app/.yarnrc /app/.npmrc /app/.nvmrc /app/*.md /app/process.json /app/app.json /app/.travis.yml
 WORKDIR /app
 COPY --from=dep-builder /app/app-minimal/node_modules /app/node_modules
