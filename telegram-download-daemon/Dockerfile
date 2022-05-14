@@ -1,9 +1,8 @@
 FROM python:alpine as builder
 WORKDIR /mnt
-RUN apk add gcc musl-dev linux-headers libffi-dev --no-cache && \
+RUN apk add gcc musl-dev linux-headers libffi-dev python3-dev libffi-dev openssl-dev cargo --no-cache && \
     /usr/local/bin/python -m pip install --upgrade pip && \
-    pip3 install cffi && \
-    pip3 wheel cryptg cffi
+    pip3 wheel cryptg cffi telethon
 
 FROM python:alpine
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
