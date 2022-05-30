@@ -12,7 +12,8 @@ ENV WEBUI_PORT=8989 \
 
 COPY rootfs /
 
-RUN apk add --no-cache tzdata curl s6 bash ca-certificates && \
+RUN adduser user -u $UID -D -G users && \
+    apk add --no-cache tzdata curl s6 bash ca-certificates && \
     wget https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases/latest/download/qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
     unzip qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
     rm -f qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
