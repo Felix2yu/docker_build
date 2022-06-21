@@ -2,8 +2,6 @@ name: telegram-download-daemon docker镜像构建
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 12 * * 5'
   push:
     branches:
       - 'main'
