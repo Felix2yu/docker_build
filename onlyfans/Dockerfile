@@ -1,4 +1,4 @@
-FROM python:3-slim
+FROM python:alpine
 
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
