@@ -14,4 +14,4 @@ VOLUME /app/.settings \
        /app/.profiles \
        /app/.sites
 
-CMD [ "python", "./start_ofd.py" ]
+CMD [ "python", "/app/start_ofd.py" ]
