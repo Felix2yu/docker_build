@@ -3,6 +3,7 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
+ARG TARGETARCH
 ENV WEBUI_PORT=8989 \
     PEER_PORT=12306 \
     UID=1000 \
@@ -14,9 +15,13 @@ COPY rootfs /
 
 RUN adduser user -u $UID -D -G users && \
     apk add --no-cache tzdata curl s6 bash ca-certificates && \
-    wget https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases/latest/download/qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
-    unzip qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
-    rm -f qbittorrent-enhanced-nox_x86_64-linux-musl_static.zip && \
+    case ${TARGETARCH} in \
+            "amd64")  ARCH=x86_64  ;; \
+            "arm64")  ARCH=aarch64  ;; \
+    esac && \
+    wget https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases/latest/download/qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
+    unzip qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
+    rm -f qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
     mv qbittorrent-nox /usr/local/bin/qbittorrent-nox && \
     chmod a+x /usr/local/bin/qbittorrent-nox /init
 
