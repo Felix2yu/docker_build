@@ -3,7 +3,7 @@ WORKDIR /mnt
 RUN apk add gcc musl-dev linux-headers libffi-dev --no-cache && \
     /usr/local/bin/python -m pip install --upgrade pip && \
     pip3 install cffi && \
-    pip3 wheel cryptg==0.3.1 cffi telethon
+    pip3 wheel cryptg==0.2 cffi telethon
 
 FROM python:alpine
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
