@@ -6,9 +6,10 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
 
 WORKDIR /app
 RUN apt-get update && apt-get install -yq git --no-install-recommends && \
-    git clone https://github.com/DIGITALCRIMINAL/OnlyFans . && \
+    git clone https://github.com/Felix2yu/OnlyFans . && \
     pip install --no-cache-dir -r requirements.txt && \
-    apt-get autoremove -y git
+    apt-get autoremove -y git && \
+    rm -rf /var/cache/apt
 
 VOLUME /app/.settings \
        /app/.profiles \
