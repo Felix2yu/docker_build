@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
 
 ARG TARGETARCH
 ENV TZ=Asia/Shanghai \
-    VERSION=v3.0.0-rc.0
+    VERSION=v3.0.0-rc.1
 
 WORKDIR /alist
 RUN mkdir -p /alist && \
