@@ -1,4 +1,4 @@
-name: ytdlp_api docker镜像构建
+name: ydl_api_ng docker镜像构建
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'ytdlp_api/**'
+      - 'ydl_api_ng/**'
 
 jobs:
   build:
@@ -20,8 +20,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            felix2yu/ytdlp_api
-            ghcr.io/felix2yu/ytdlp_api
+            felix2yu/ydl_api_ng
+            ghcr.io/felix2yu/ydl_api_ng
           tags: |
             type=raw,value=latest
             type=schedule,pattern={{date 'YYYYMMDD'}}
@@ -50,8 +50,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./ytdlp_api
-          platforms: linux/amd64,linux/386,linux/arm64
+          context: ./ydl_api_ng
+          platforms: linux/amd64,linux/386
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
