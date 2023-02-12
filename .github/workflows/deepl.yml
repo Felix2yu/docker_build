@@ -20,7 +20,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            felix2yu/deepl
+            ghcr.io/felix2yu/deepl
           tags: |
             type=raw,value=latest
             type=schedule,pattern={{date 'YYYYMMDD'}}
