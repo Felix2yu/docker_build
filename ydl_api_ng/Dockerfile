@@ -7,15 +7,15 @@ ENV UID=1000 GID=1000 GIT_BRANCH=$GIT_BRANCH GIT_REVISION=$GIT_REVISION DATE=$DA
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y dos2unix unzip wget xz-utils && \
-    wget https://github.com/Totonyus/ydl_api_ng/archive/refs/heads/develop.zip && \
-    unzip develop.zip && \
+    wget https://github.com/Totonyus/ydl_api_ng/archive/refs/heads/main.zip && \
+    unzip main.zip && \
     mkdir -p /app/setup && \
-    cp ydl_api_ng-develop/*.py . && \
-    cp ydl_api_ng-develop/params/* ./setup/ && \
-    cp ydl_api_ng-develop/entrypoint.sh . && \
-    cp ydl_api_ng-develop/pip_requirements . && \
+    cp ydl_api_ng-main/*.py . && \
+    cp ydl_api_ng-main/params/* ./setup/ && \
+    cp ydl_api_ng-main/entrypoint.sh . && \
+    cp ydl_api_ng-main/pip_requirements . && \
     mv setup/params_docker.ini ./setup/params.ini && \
-    rm -rf develop.zip ydl_api_ng-develop && \
+    rm -rf main.zip ydl_api_ng-main && \
     chmod +x entrypoint.sh && \
     dos2unix * ./setup/* && \
     case ${TARGETARCH} in \
