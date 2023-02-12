@@ -20,7 +20,7 @@ RUN mkdir -p $OUTPUT_DIR && \
             "arm64")  ARCH=arm64  ;; \
             "386")    ARCH=386   ;; \
     esac && \
-    wget -q https://github.com/Felix2yu/bililive-go/releases/latest/download/bililive-linux-$ARCH.tar.gz && \
+    wget -q https://github.com/hr3lxphr6j/bililive-go/releases/latest/download/bililive-linux-$ARCH.tar.gz && \
     tar zxvf bililive-linux-$ARCH.tar.gz && \
     mv config.yml $CONF_DIR/config.yml && \
     chmod +x bililive-linux-$ARCH && \
