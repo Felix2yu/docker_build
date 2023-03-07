@@ -7,7 +7,7 @@ ENV TZ=Asia/Shanghai \
 
 WORKDIR /app
 
-RUN apk add bash tzdata ca-certificates supercronic --no-cache && \
+RUN apk add bash tzdata ca-certificates git --no-cache && \
     wget https://github.com/Felix2yu/docker-db-auto-backup/raw/master/requirements.txt && \
     pip install --no-cache-dir -r requirements.txt && \
     wget https://github.com/Felix2yu/docker-db-auto-backup/raw/master/db-auto-backup.py && \
@@ -15,4 +15,4 @@ RUN apk add bash tzdata ca-certificates supercronic --no-cache && \
 
 VOLUME ["/var/backups"]
 
-CMD supercronic <(echo "$SCHEDULE" python3 db-auto-backup.py)
+CMD ["python3", "./db-auto-backup.py"]
