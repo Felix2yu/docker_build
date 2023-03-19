@@ -1,21 +1,23 @@
-FROM alpine:latest
+FROM debian:stable-slim
 
+LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
+      maintainer="Felix2yu <yufei.im@icloud.com>" \
+      org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
+
+ARG TARGETARCH
 ENV TZ=Asia/Shanghai
-ARG GLIBC_VERSION="2.34-r0" \
-    SNELL_VERSION="3.0.1"
+ARG SNELL_VERSION="v4.0.1"
 
-RUN apk update && apk upgrade && \
-    apk add --update tzdata libstdc++ && \
-    wget -q -O "/etc/apk/keys/sgerrand.rsa.pub" https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    wget -q -O "glibc.apk" "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk" && \
-    wget -q -O "glibc-bin.apk" "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk" && \
-    apk add glibc-bin.apk glibc.apk && \
-    /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
-    echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
-    rm -rf glibc.apk glibc-bin.apk /var/cache/apk/* && \
-    wget -q -O "snell-server.zip" https://github.com/surge-networks/snell/releases/download/v${SNELL_VERSION}/snell-server-v${SNELL_VERSION}-linux-amd64.zip && \
+RUN apt-get update && apt-get install --no-install-recommends -y wget tzdata unzip && \
+    case ${TARGETARCH} in \
+            "amd64")  ARCH=amd64  ;; \
+            "arm64")  ARCH=aarch64  ;; \
+            "386")    ARCH=i386   ;; \
+    esac && \
+    wget --no-check-certificate -q -O "snell-server.zip" https://dl.nssurge.com/snell/snell-server-${SNELL_VERSION}-linux-${ARCH}.zip && \
     unzip snell-server.zip && \
     rm snell-server.zip && \
-    mv snell-server /usr/bin/
+    mv snell-server /usr/bin/ && \
+    apt-get autoremove -y unzip wget && apt-get clean -y && rm -rf /var/lib/apt/lists/* /var/cache/apt
 
 CMD ["/usr/bin/snell-server", "-c", "/etc/snell-server.conf"]
