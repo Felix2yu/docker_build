@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
-ARG TARGETARCH VERSION=0.8.5
+ARG TARGETARCH VERSION=1.0.0-alpha0
 ENV TZ=Asia/Shanghai
 
 RUN apk update && \
@@ -14,9 +14,9 @@ RUN apk update && \
             "arm64")  ARCH=aarch64 ;; \
             "386")    ARCH=i686   ;; \
     esac && \
-    wget -q https://github.com/EAimTY/tuic/releases/download/${VERSION}/tuic-server-${VERSION}-${ARCH}-linux-musl && \
-    chmod +x tuic-server-${VERSION}-${ARCH}-linux-musl && \
-    mv ./tuic-server-${VERSION}-${ARCH}-linux-musl /usr/bin/tuic-server
+    wget -q https://github.com/EAimTY/tuic/releases/download/tuic-server-${VERSION}/tuic-server-${VERSION}-${ARCH}-unknown-linux-musl && \
+    chmod +x tuic-server-${VERSION}-${ARCH}-unknown-linux-musl && \
+    mv ./tuic-server-${VERSION}-${ARCH}-unknown-linux-musl /usr/bin/tuic-server
 
 VOLUME /etc/tuic/config.json
 EXPOSE 443
