@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_buil
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
-ARG TARGETARCH VERSION=1.0.0-beta0
+ARG TARGETARCH VERSION=1.0.0-rc0
 ENV TZ=Asia/Shanghai
 
 RUN apk update && \
