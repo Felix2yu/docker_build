@@ -14,4 +14,4 @@ RUN case ${TARGETARCH} in \
     mv $ARCH-unknown-linux-musl-simple-http-server /usr/local/bin/simple-http-server && \
     chmod +x /usr/local/bin/simple-http-server
     
-CMD ["/usr/local/bin/simple-http-server", "--upload-size-limit", "200000000"]
+CMD ["/usr/local/bin/simple-http-server", "--upload-size-limit", "200000000", "--index", "--upload"]
