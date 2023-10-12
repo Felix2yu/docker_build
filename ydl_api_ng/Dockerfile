@@ -30,20 +30,10 @@ ENV UID=1000 GID=1000 GIT_BRANCH=$GIT_BRANCH GIT_REVISION=$GIT_REVISION DATE=$DA
 WORKDIR /app
 COPY --from=builder /mnt/ /app/
 
-RUN apt-get update && apt-get install -y bash tzdata ca-certificates wget xz-utils && \
+RUN apt-get update && apt-get install -y --no-install-recommends bash tzdata ca-certificates ffmpeg && \
     /usr/local/bin/python -m pip install --upgrade pip --no-warn-script-location && \
     pip install *.whl --no-warn-script-location && \
     rm -f *.whl && \
-    case ${TARGETARCH} in \
-            "amd64")  ARCH=amd64  ;; \
-            "arm64")  ARCH=arm64  ;; \
-    esac && \
-    wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-$ARCH-static.tar.xz && \
-    tar xvf ffmpeg-release-$ARCH-static.tar.xz && \
-    rm -f ffmpeg-release-$ARCH-static.tar.xz && \
-    cp ff*/ffmpeg ff*/ffprobe ff*/qt-faststart /usr/local/bin/ && \
-    rm -rf ff* && \
-    apt-get autoremove -y xz-utils wget && \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 CMD ["./entrypoint.sh"]
