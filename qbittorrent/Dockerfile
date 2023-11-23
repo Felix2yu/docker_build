@@ -1,37 +1,20 @@
-FROM alpine:latest
+FROM ghcr.io/linuxserver/qbittorrent:latest
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
 
 ARG TARGETARCH
-ENV WEBUI_PORT=8989 \
-    PEER_PORT=12306 \
-    UID=1000 \
-    GID=100 \
-    UMASK=022 \
+ENV WEBUI_PORT=8080 \
+    PUID=1000 \
+    PGID=100 \
     TZ=Asia/Shanghai
 
-COPY rootfs /
-
-RUN adduser user -u $UID -D -G users && \
-    apk add --no-cache tzdata curl s6 bash ca-certificates && \
-    case ${TARGETARCH} in \
+RUN case ${TARGETARCH} in \
             "amd64")  ARCH=x86_64  ;; \
             "arm64")  ARCH=aarch64  ;; \
     esac && \
     wget https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases/latest/download/qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
     unzip qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
     rm -f qbittorrent-enhanced-nox_$ARCH-linux-musl_static.zip && \
-    mv qbittorrent-nox /usr/local/bin/qbittorrent-nox && \
-    chmod a+x /usr/local/bin/qbittorrent-nox /init
-
-VOLUME /config
-
-EXPOSE $WEBUI_PORT \
-       $PEER_PORT \
-       $PEER_PORT/udp
-
-ENTRYPOINT ["/init"]
-
-HealthCheck --interval=60s --timeout=3s --retries=3 \
-  CMD curl -m 5 -fs http://localhost:{$WEBUI_PORT} || exit 1
+    mv qbittorrent-nox /usr/bin/qbittorrent-nox && \
+    chmod a+x /usr/bin/qbittorrent-nox
