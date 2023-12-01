@@ -7,8 +7,8 @@ RUN apk --no-cache add libsass-dev pcre
 
 WORKDIR /src/nitter
 
-RUN git clone https://github.com/Felix2yu/nitter . && \
-    git checkout 813a71e4d33aab8a3847857444921a61b37117db && \
+RUN git clone https://github.com/zedeus/nitter . && \
+    git checkout guest_accounts && \
     nimble install -y --depsOnly && \
     nimble build -d:danger -d:lto -d:strip && \
     nimble scss && \
