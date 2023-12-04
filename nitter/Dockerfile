@@ -16,7 +16,7 @@ RUN git clone https://github.com/zedeus/nitter . && \
 
 FROM alpine:latest
 WORKDIR /app/
-RUN apk --no-cache add pcre ca-certificates
+RUN apk --no-cache add pcre ca-certificates tzdata
 COPY --from=builder /src/nitter/nitter ./
 COPY --from=builder /src/nitter/nitter.example.conf ./nitter.conf
 COPY --from=builder /src/nitter/public ./public
