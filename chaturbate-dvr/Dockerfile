@@ -22,5 +22,5 @@ COPY --from=backendbuild /src/chaturbate-dvr/chaturbate-dvr chaturbate-dvr
 RUN chmod +x chaturbate-dvr
 
 VOLUME /app/video
-
-CMD [ "sh", "-c", "/app/chaturbate-dvr -u $USERNAME" ]
+EXPOSE 8080
+CMD [ "/app/chaturbate-dvr" ]
