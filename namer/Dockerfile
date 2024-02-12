@@ -1,4 +1,4 @@
-FROM ubuntu:noble as base
+FROM ubuntu:jammy as base
 
 ENV TZ=Asia/Shanghai
 ARG DEBIAN_FRONTEND=noninteractive
