@@ -1,4 +1,4 @@
-FROM ubuntu:jammy as base
+FROM ubuntu:noble as base
 
 ENV TZ=Asia/Shanghai
 ARG DEBIAN_FRONTEND=noninteractive
@@ -55,7 +55,8 @@ RUN apt-get install -y --no-install-recommends \
 RUN npm install --global pnpm
 
 RUN mkdir /work/
-RUN git clone https://github.com/Felix2yu/namer /work
+RUN git clone https://github.com/Felix2yu/namer /work \
+    && git clone https://github.com/4c0d3r/videohashes /work/videohashes/
 ENV PATH="/root/.local/bin:$PATH"
 WORKDIR /work
 RUN rm -rf /work/namer/__pycache__/ || true \
