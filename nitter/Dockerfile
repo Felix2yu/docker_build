@@ -1,4 +1,4 @@
-FROM nimlang/nim:2.0.0-alpine-regular as builder
+FROM nimlang/nim:2.0.2-alpine-regular as builder
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
@@ -7,8 +7,7 @@ RUN apk --no-cache add libsass-dev pcre
 
 WORKDIR /src/nitter
 
-RUN git clone https://github.com/zedeus/nitter . && \
-    git checkout guest_accounts && \
+RUN git clone https://github.com/PrivacyDevel/nitter . && \
     nimble install -y --depsOnly && \
     nimble build -d:danger -d:lto -d:strip && \
     nimble scss && \
@@ -23,4 +22,4 @@ COPY --from=builder /src/nitter/public ./public
 EXPOSE 8080
 RUN adduser -h /app/ -u 1000 -D -G users -s /bin/sh nitter
 USER nitter
-CMD ./nitter
+CMD ["/app/nitter"]
