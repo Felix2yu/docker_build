@@ -16,7 +16,6 @@ ENV UV_LINK_MODE=copy
 COPY --from=ghcr.io/astral-sh/uv:0.6.12 /uv /uvx /bin/
 WORKDIR /app
 RUN git clone https://github.com/2977094657/BilibiliHistoryFetcher .
-RUN --mount=type=cache,target=/root/.cache/uv uv sync && \
-    pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/uv uv sync
       
 CMD ["uv", "run", "main.py"]
