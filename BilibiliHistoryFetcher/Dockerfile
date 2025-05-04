@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
       
 ENV UV_LINK_MODE=copy
-COPY --from=ghcr.io/astral-sh/uv:0.6.12 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 WORKDIR /app
 RUN git clone https://github.com/2977094657/BilibiliHistoryFetcher .
 RUN --mount=type=cache,target=/root/.cache/uv uv sync
