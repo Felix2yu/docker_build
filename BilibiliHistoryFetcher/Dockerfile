@@ -17,7 +17,5 @@ COPY --from=ghcr.io/astral-sh/uv /uv /uvx /bin/
 WORKDIR /app
 RUN git clone https://github.com/2977094657/BilibiliHistoryFetcher .
 RUN --mount=type=cache,target=/root/.cache/uv uv sync
-# https://docs.astral.sh/uv/guides/integration/pytorch/#automatic-backend-selection
-RUN uv pip install torch torchaudio torchvision --torch-backend=cpu --preview
       
 CMD ["uv", "run", "main.py"]
