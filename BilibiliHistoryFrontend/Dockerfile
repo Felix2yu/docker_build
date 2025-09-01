@@ -24,6 +24,8 @@ FROM caddy:2-alpine AS release
 LABEL org.opencontainers.image.source = "https://github.com/Felix2yu/docker_build" \
       maintainer="Felix2yu <yufei.im@icloud.com>" \
       org.opencontainers.image.authors="Felix2yu <yufei.im@icloud.com>"
+ARG BACKEND_URL_ARG=http://localhost:8899
+ENV VITE_DEFAULT_BACKEND_URL=${BACKEND_URL_ARG}
 
 WORKDIR /app
 COPY --from=build /src/dist /app
